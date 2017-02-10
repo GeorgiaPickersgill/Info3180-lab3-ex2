@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+{% extends "base.html" %} 
+{% block main %} 
+<h1><b>Contact Form</b> </h1> <hr> <br>
+Fill in this form to contact the site owners.<br><br>
+<form action = "{{ url_for('contact') }}"" method= "POST">
+	{{ form.csrf_token}}
+	<div>
+	<p>Name</p>
+	{{form.name.label}}
+	{{form.name(size=20)}}
+	<br><br><br>
+	</div>
+
+	<div>
+	<p>E-mail</p>
+	{{form.email.label}}
+	{{form.email(size=20)}}
+	<br><br><br>
+	</div>
+
+	<div>
+	<p>Subject</p>
+	{{form.subject.label}}
+	{{form.subject(size=20)}}
+	<br><br><br>
+	</div>
+	<div>
+	<p>Message</p>
+	{{form.msg.label}}
+	{{form.msg(size=60)}}
+	<br><br> <br>
+	{{form.send(size=20)}}
+	<input type="submit" value="send">
+	</div>
+</form>
+{% endblock %}
+</html>

@@ -6,9 +6,10 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
-
-
+from flask import render_template, request, redirect, url_for, flash
+import send_email
+from .form import ContactForm
+from .send_email import *
 ###
 # Routing for your application.
 ###
@@ -18,6 +19,23 @@ def home():
     """Render website's home page."""
     return render_template('home.html')
 
+@app.route('/contact', methods= ['GET', 'POST'])
+def contact ():
+    form = ContactForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            email = request.form['email']
+            msg = request.form['msg']
+            name = request.form['name']
+            subject = request.form['subject']
+            send_email(name, email, subject, msg)
+            redirect(url_for('contact'))
+            flash('Your email was successfully sent')
+        else:
+            flash('Your email was not submitted. Remember all fields are required.')
+            return render_template('contact.html', form=form)
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
 
 @app.route('/about/')
 def about():
@@ -51,6 +69,7 @@ def add_header(response):
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+
 
 
 if __name__ == '__main__':
